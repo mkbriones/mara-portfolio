@@ -10,7 +10,7 @@
       }"
       @click="portfolio.url && open(portfolio.url)"
     >
-      <div class="image-wrapper" v-if="portfolio.pictures?.length > 0">
+      <div class="image-wrapper" v-if="portfolio.pictures && portfolio.pictures.length > 0">
         <img
           class="card-img-top"
           :src="portfolio.pictures[0].img"
@@ -23,7 +23,7 @@
       </div>
       <div
         class="card-body"
-        :class="{ 'pborder-top': portfolio.pictures?.length > 0 }"
+        :class="{ 'pborder-top': portfolio.pictures && portfolio.pictures.length > 0 }"
       >
         <h5 class="title2">{{ portfolio.name }}</h5>
         <div class="card-text">
