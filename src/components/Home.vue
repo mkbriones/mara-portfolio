@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ 'bg-white': !nightMode, 'bg-dark': nightMode }"
-    class="pt-5 p-st"
+    class="pb-5 p-st"
   >
     <div
       class="container"
@@ -17,14 +17,26 @@
           <span
             class="home-title"
             :class="{ pgray: !nightMode, 'text-light': nightMode }"
-            >hello there!</span
+            >{{ name }}</span
           >
           <div>
             <p v-html="description"></p>
           </div>
-          <div class="text-center pb-4">
+          <!-- Contact Details Section -->
+          <div class="contact-details mt-4 mb-4">
+            <div class="contact-item">
+              <i class="fa fa-map-marker-alt"></i> <span>{{ location }}</span>
+            </div>
+            <div class="contact-item">
+              <i class="fa fa-phone"></i> <span>{{ phone }}</span>
+            </div>
+            <div class="contact-item">
+              <i class="fa fa-envelope"></i> <span>{{ email }}</span>
+            </div>
+          </div>
+          <div class="pb-4">
             <button
-              class="btn btn-outline-secondary mx-2 "
+              class="btn btn-outline-secondary mx-2"
               @click="open('linkedin')"
               v-tooltip.bottom="'LinkedIn'"
             >
@@ -32,24 +44,17 @@
             </button>
             <button
               class="btn btn-outline-secondary mx-2"
-              @click="open('github')"
-              v-tooltip.bottom="'GitHub'"
+              @click="open('facebook')"
+              v-tooltip.bottom="'Facebook'"
             >
-              <i class="fab fa-github"></i>
+              <i class="fab fa-facebook"></i>
             </button>
             <button
               class="btn btn-outline-secondary mx-2"
-              @click="open('angellist')"
-              v-tooltip.bottom="'AngelList'"
+              @click="open('instagram')"
+              v-tooltip.bottom="'Instagram'"
             >
-              <i class="fab fa-angellist"></i>
-            </button>
-            <button
-              class="btn btn-outline-secondary mx-2"
-              @click="open('resume')"
-              v-tooltip.bottom="'Resume'"
-            >
-              <i class="fa fa-file"></i>
+              <i class="fab fa-instagram"></i>
             </button>
           </div>
         </div>
@@ -76,12 +81,14 @@ export default {
   data() {
     return {
       picture: info.flat_picture,
-      description: info.description,
       name: info.name,
+      description: info.description,
+      phone: info.details.phone,
+      email: info.details.email,
+      location: info.details.location,
       linkedin: info.links.linkedin,
-      github: info.links.github,
-      angellist: info.links.angellist,
-      resume: info.links.resume
+      facebook: info.links.facebook,
+      instagram: info.links.instagram
     };
   },
   methods: {
@@ -90,14 +97,11 @@ export default {
         case "linkedin":
           window.open(this.linkedin, "_blank");
           break;
-        case "github":
-          window.open(this.github, "_blank");
+        case "facebook":
+          window.open(this.facebook, "_blank");
           break;
-        case "angellist":
-          window.open(this.angellist, "_blank");
-          break;
-        case "resume":
-          window.open(this.resume, "_blank");
+        case "instagram":
+          window.open(this.instagram, "_blank");
           break;
       }
     },
@@ -114,7 +118,6 @@ export default {
 img {
   max-width: 300px;
   margin-top: 60px;
-  transform: rotateY(180deg);
 }
 
 @media only screen and (max-width: 580px) {
@@ -159,5 +162,18 @@ p {
   font-weight: 400;
 }
 
-/* LEAVES */
+.contact-details {
+  margin-top: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.contact-item i {
+  margin-right: 10px;
+}
+
 </style>

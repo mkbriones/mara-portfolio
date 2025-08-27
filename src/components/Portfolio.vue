@@ -26,17 +26,45 @@
       />
 
       <vue-tabs :activeTextColor="!nightMode ? '#535A5E' : '#dfdfdf'">
-        <v-tab title="development">
+        <v-tab title="Sprobe">
           <br />
           <div class="row">
             <div
-              class="col-xl-4 col-bg-4 col-md-6 col-sm-12"
-              v-for="(portfolio, idx) in portfolio_info"
-              :key="portfolio.name"
+              class="col-xl-4 col-bg-4 col-md-6 col-sm-12 d-flex"
+              v-for="(portfolio_sprobe, idx) in sprobeProjects"
+              :key="portfolio_sprobe.name"
             >
               <Card
                 :style="{ 'transition-delay': (idx % 3) / 4.2 + 's' }"
-                :portfolio="portfolio"
+                :portfolio="portfolio_sprobe"
+                @show="showModalFn"
+                data-aos="fade-up"  
+                :nightMode="nightMode"
+                data-aos-offset="100"
+                data-aos-delay="10"
+                data-aos-duration="500"
+                data-aos-easing="ease-in-out"
+                data-aos-mirror="true"
+                data-aos-once="true"
+              />
+            </div>
+          </div>
+          <!-- <div class="text-center py-3" v-if="showBtn !== 'show less'">
+            <button class="btn" @click.prevent="showMore">{{ showBtn }}</button>
+          </div> -->
+        </v-tab>
+
+        <v-tab title="TLLCM">
+          <br />
+          <div class="row">
+            <div
+              class="col-xl-4 col-bg-4 col-md-6 col-sm-12 d-flex"
+              v-for="(portfolio_tllcm, idx) in tllcmProjects"
+              :key="portfolio_tllcm.name"
+            >
+              <Card
+                :style="{ 'transition-delay': (idx % 3) / 4.2 + 's' }"
+                :portfolio="portfolio_tllcm"
                 @show="showModalFn"
                 data-aos="fade-up"
                 :nightMode="nightMode"
@@ -49,64 +77,39 @@
               />
             </div>
           </div>
-          <div class="text-center py-3" v-if="showBtn !== 'show less'">
+          <!-- <div class="text-center py-3" v-if="showBtn !== 'show less'">
             <button class="btn" @click.prevent="showMore">{{ showBtn }}</button>
-          </div>
+          </div> -->
         </v-tab>
 
-        <v-tab title="design">
+        <v-tab title="Bounty">
+          <br />
           <div class="row">
             <div
-              v-for="(design, idx) in desgin_info"
-              :key="idx"
-              :class="{ 'mt-4': idx === 0 ? true : true }"
-              class="col-xl-6 col-bg-6 col-md-12 col-sm-12"
-              style="position: relative;"
+              class="col-xl-4 col-bg-4 col-md-6 col-sm-12 d-flex"
+              v-for="(portfolio_bounty, idx) in bountyProjects"
+              :key="portfolio_bounty.name"
             >
-              <vueper-slides
-                :dragging-distance="50"
-                fixed-height="300px"
-                :bullets="false"
-                slide-content-outside="bottom"
-                style="position: aboslute"
-                  @click.prevent="showDesignModalFn(design)"
-
-              >
-                <vueper-slide
-                  v-for="(slide, i) in design.pictures"
-                  :key="i"
-                  :image="slide.img"
-                />
-              </vueper-slides>
-              <div
-                style="width: 100%; display: flex; justify-content: space-between"
-                class="mt-2"
-              >
-                <div>
-                  <div class="title2" style="font-weight: 500;">{{ design.title }}</div>
-                  <span
-                    class="badge mr-2 mb-2"
-                    v-for="tech in design.technologies"
-                    :key="tech"
-                    :class="{ 'bg-dark4': nightMode }"
-                    >{{ tech }}</span
-                  >
-                  •
-                  <span class="date ml-1">{{design.date}}</span>
-                </div>
-
-                <button
-                  style="height: 31px; margin-top: 5px;"
-                  class="btn-sm btn btn-outline-secondary no-outline"
-                  @click.prevent="showDesignModalFn(design)"
-                >
-                  read more
-                </button>
-              </div>
+              <Card
+                :style="{ 'transition-delay': (idx % 3) / 4.2 + 's' }"
+                :portfolio="portfolio_bounty"
+                @show="showModalFn"
+                data-aos="fade-up"
+                :nightMode="nightMode"
+                data-aos-offset="100"
+                data-aos-delay="10"
+                data-aos-duration="500"
+                data-aos-easing="ease-in-out"
+                data-aos-mirror="true"
+                data-aos-once="true"
+              />
             </div>
           </div>
-          <br />
+          <!-- <div class="text-center py-3" v-if="showBtn !== 'show less'">
+            <button class="btn" @click.prevent="showMore">{{ showBtn }}</button>
+          </div> -->
         </v-tab>
+       
       </vue-tabs>
     </div>
     <transition name="modal">
@@ -161,16 +164,19 @@ export default {
   },
   data() {
     return {
-      all_info: info.portfolio,
-      desgin_info: info.portfolio_design,
-      portfolio_info: [],
+      sprobeList: info.portfolio_sprobe || [],
+      tllcmList: info.portfolio_tllcm || [],
+      bountyList: info.portfolio_bounty || [],
+      // all_info: info.portfolio || [],
+      // desgin_info: info.portfolio_design,
+      // portfolio_info: info.portfolio,
       showModal: false,
       showDesignModal: false,
       modal_info: {},
       design_modal_info: {},
-      number: 3,
-      showBtn: "show more",
-      shower: 0,
+      // number: 3,
+      // showBtn: "show more",
+      // shower: 0,
       data: [
         '<div class="example-slide">Slide 1</div>',
         '<div class="example-slide">Slide 2</div>',
@@ -178,18 +184,23 @@ export default {
       ],
     };
   },
-  created() {
-    for (var i = 0; i < this.number; i++) {
-      this.portfolio_info.push(this.all_info[i]);
-    }
-  },
-  watch: {
-    number() {
-      this.portfolio_info = [];
-      for (var i = 0; i < this.number; i++) {
-        this.portfolio_info.push(this.all_info[i]);
-      }
-    },
+  // created() {
+  //   for (var i = 0; i < this.number; i++) {
+  //     this.portfolio_info.push(this.all_info[i]);
+  //   }
+  // },
+  // watch: {
+  //   number() {
+  //     this.portfolio_info = [];
+  //     for (var i = 0; i < this.number; i++) {
+  //       this.portfolio_info.push(this.all_info[i]);
+  //     }
+  //   },
+  // },
+  computed: {
+    sprobeProjects() { return this.sprobeList; },
+    tllcmProjects() { return this.tllcmList; },
+    bountyProjects() { return this.bountyList; },
   },
   methods: {
     next() {

@@ -6,18 +6,27 @@
         'pcard-dark': nightMode,
         pcard: !nightMode,
         'bg-dark3': nightMode,
+        'clickable': portfolio.url,
       }"
+      @click="portfolio.url && open(portfolio.url)"
     >
-      <div style="height: 180px;">
+      <div class="image-wrapper" v-if="portfolio.pictures?.length > 0">
         <img
           class="card-img-top"
           :src="portfolio.pictures[0].img"
           alt="Card image cap"
         />
+        <div class="overlay" v-if="portfolio.url">
+          <i class="fas fa-eye"></i>
+        </div>
+        <span class="url-source">{{ portfolio.source }}</span>
       </div>
-      <div class="card-body pborder-top">
+      <div
+        class="card-body"
+        :class="{ 'pborder-top': portfolio.pictures?.length > 0 }"
+      >
         <h5 class="title2">{{ portfolio.name }}</h5>
-        <div>
+        <div class="card-text">
           <div class="pb-1 bheight">
             <span
               class="badge mr-2 mb-2 "
@@ -29,30 +38,14 @@
           </div>
           <p
             class="title3 m-0 pb-2 pheight pt-1"
-            v-html="
-              portfolio.description.length > 100
-                ? portfolio.description.substring(0, 105) + '...'
-                : portfolio.description
-            "
+            v-html="portfolio.description"
           >
           </p>
-        </div>
-        <div class="text-center mt-2">
-          <button
-            href=""
-            class="btn-sm btn btn-outline-secondary no-outline"
-            @click.prevent="showModal"
-          >
-            read more
-          </button>
-          <button
-            href="#"
-            class="btn-sm btn btn-outline-secondary no-outline ml-4"
-            v-if="portfolio.visit"
-            @click.prevent="open(portfolio.visit)"
-          >
-            visit website
-          </button>
+          
+          <!-- <p style="font-style: italic; margin-top: 10px;" v-if="portfolio.support">
+            <span style="font-weight: bold;">Support:</span>
+            {{ portfolio.task }}
+          </p> -->
         </div>
       </div>
     </div>
@@ -82,6 +75,16 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-body {
+  flex: 1 1 auto;
+}
+
 img {
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
@@ -101,14 +104,14 @@ img {
 }
 
 .bheight {
-  height: 65px;
+  /* height: 65px; */
   overflow: auto;
 }
 
 .pheight {
-  height: 110px;
+  /* height: 110px;
   max-height: 130px;
-  overflow: auto;
+  overflow: auto; */
   text-align: justify;
 }
 
@@ -117,6 +120,7 @@ div.img-div {
   width: 100%;
   height: 100%;
 }
+
 .pborder-top {
   border-top: 1px solid rgb(193, 193, 193);
 }
@@ -127,7 +131,7 @@ div.img-div {
   border: none;
   box-shadow: 1px 1px 12px rgb(233, 233, 233);
   transition: all 0.5s;
-  height: 460px;
+  /* height: 460px; */
 }
 
 .pcard:hover {
@@ -142,13 +146,17 @@ div.img-div {
   background-color: #30363a !important;
   /* box-shadow: 1px 1px 12px rgb(53, 53, 53); */
   transition: all 0.5s;
-  height: 460px;
+  /* height: 460px; */
 }
 
 .pcard-dark:hover {
   transition: all 0.5s;
   /* cursor: pointer; */
   box-shadow: 1px 1px 12px rgb(53, 53, 53);
+}
+
+.card-img-top {
+  height: -webkit-fill-available;
 }
 
 .pcard-body {
@@ -206,5 +214,61 @@ div.img-div {
 
 .bg-dark4 {
   background-color: #494e55 !important;
+}
+
+.image-wrapper {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+}
+
+.image-wrapper img {
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* Eye icon overlay */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.overlay i {
+  color: white;
+  font-size: 24px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover .image-wrapper img {
+  transform: scale(1.1);
+}
+
+.clickable:hover .overlay {
+  opacity: 1;
+}
+
+.url-source {
+  position: absolute;
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 500;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 0 10px;
 }
 </style>
